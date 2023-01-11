@@ -1,237 +1,32 @@
-const fs = require('fs');
-const { parse } = require('csv-parse/sync');
-const axios = require('axios');
+const parser = require('./utils/parser');
+const {
+  register,
+  createConversation,
+  getMessage,
+  postMessage,
+} = require('./utils/api');
+const { init, number, string, team } = require('./utils/processor');
 
-const BASE_URL = 'https://code-challenge.us1.sandbox-rivaltech.io';
-
-const sportTeams = fs.readFileSync('./sports-teams.dat', 'utf8');
-
-const register = async (body) => {
+const getContent = ({ messages }) => {
   try {
-    const { data } = await axios({
-      method: 'post',
-      url: `${BASE_URL}/challenge-register`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(body),
-    });
+    const data = parser(messages);
 
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.log(error);
-
-    return null;
-  }
-};
-
-const createConversation = async (body) => {
-  try {
-    const { data } = await axios({
-      method: 'post',
-      url: `${BASE_URL}/challenge-conversation`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(body),
-    });
-
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.log(error);
-
-    return null;
-  }
-};
-
-const getMessage = async (params) => {
-  try {
-    const { data } = await axios({
-      method: 'get',
-      url: `${BASE_URL}/challenge-behaviour/${params.conversation_id}`,
-    });
-
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.log(error);
-
-    return null;
-  }
-};
-
-const postMessage = async (params, body) => {
-  try {
-    console.log('postMessage', body);
-
-    const { data } = await axios({
-      method: 'post',
-      url: `${BASE_URL}/challenge-behaviour/${params.conversation_id}`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(body),
-    });
-
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    // console.log(error);
-
-    return null;
-  }
-};
-
-const cleanText = (msg, replacer) => {
-  return msg
-    .replace(replacer, '')
-    .split(':')[1]
-    .trim()
-    .split(',')
-    .map((a) => a.trim());
-};
-
-const isEven = (str) => !(str.length % 2);
-
-const parseMessage = ({ messages }) => {
-  try {
-    const text1 = messages[0]?.text;
-
-    const text2 = messages[1]?.text;
-
-    const text = text2 || text1;
-
-    if (text.includes('ready')) {
+    if (data.type === 'init') {
+      return init();
+    } else if (data.type === 'number') {
+      return number(data);
+    } else if (data.type === 'string') {
+      return string(data);
+    } else if (data.type === 'team') {
+      return team(data);
+    } else if (data.type === 'bye') {
       return {
-        content: 'yes',
-      };
-    } else if (text.includes('numbers') && text.includes('sum')) {
-      const sum = cleanText(text, '?').reduce(
-        (partialSum, a) => partialSum + Number(a),
-        0,
-      );
-
-      return {
-        content: String(sum),
-      };
-    } else if (text.includes('numbers') && text.includes('largest')) {
-      const largest = Math.max(
-        ...cleanText(text, '?').sort((a, b) => {
-          return a - b;
-        }),
-      );
-
-      return {
-        content: String(largest),
-      };
-    } else if (text.includes('words') && text.includes('even')) {
-      const evenWords = (strArr) => {
-        return strArr
-          .reduce((acc, val) => {
-            if (isEven(val)) {
-              acc.push(val);
-            }
-            return acc;
-          }, [])
-          .join(',');
-      };
-
-      return {
-        content: evenWords(cleanText(text, '.')),
-      };
-    } else if (text.includes('words') && text.includes('alphabetize')) {
-      return {
-        content: cleanText(text, '.')
-          .sort((a, b) => {
-            return a.localeCompare(b);
-          })
-          .join(','),
-      };
-    } else if (
-      text.includes('sports') &&
-      text.includes('teams') &&
-      text.includes('established')
-    ) {
-      const selector = text
-        .replace('What sports teams in the data set were established in ', '')
-        .replace('?', '');
-
-      const yearsObj = parse(sportTeams, {
-        columns: true,
-        ltrim: true,
-        rtrim: true,
-        trim: true,
-        skipEmptyLines: true,
-        skipRecordsWithEmptyValues: true,
-      });
-
-      let teams = [];
-
-      for (let index = 0; index < yearsObj.length; index++) {
-        const element = yearsObj[index];
-        if (element['year founded'] === selector) {
-          teams.push(element['# Team name']);
-        }
-      }
-
-      return {
-        content: teams.join(','),
-      };
-    } else if (text.includes('team')) {
-      const selector = text
-        .split(':')[0]
-        .replace('Which of the following is ', '')
-        .replace('an ', '')
-        .replace('a ', '')
-        .replace(' team', '');
-
-      const teams = cleanText(text, '?');
-
-      const teamsObj = parse(sportTeams, {
-        columns: true,
-        ltrim: true,
-        rtrim: true,
-        trim: true,
-        skipEmptyLines: true,
-        skipRecordsWithEmptyValues: true,
-        objname: '# Team name',
-      });
-
-      const sportsObj = parse(sportTeams, {
-        columns: true,
-        ltrim: true,
-        rtrim: true,
-        trim: true,
-        skipEmptyLines: true,
-        skipRecordsWithEmptyValues: true,
-        objname: 'sport',
-      });
-
-      let team = '';
-
-      teams.forEach((element) => {
-        const teamObj = teamsObj[element] || sportsObj[element];
-
-        if (teamObj['team league'] === selector) {
-          team = element;
-        } else if (teamObj['sport'] === selector) {
-          team = element;
-        }
-      });
-
-      return {
-        content: team,
+        content: 'Thanks, Bye',
       };
     }
 
     return {
-      content: 'yes',
+      content: 'no',
     };
   } catch (error) {
     console.log(error);
@@ -243,7 +38,7 @@ const parseMessage = ({ messages }) => {
 (async () => {
   const user = await register({
     name: 'Lancy Goyal',
-    email: 'lancy@goyal.com',
+    email: 'i.lancygoyal@gmail.com',
   });
 
   if (!user) return;
@@ -256,7 +51,7 @@ const parseMessage = ({ messages }) => {
 
   if (!messages) return;
 
-  let result = await postMessage(conversation, parseMessage(messages));
+  let result = await postMessage(conversation, getContent(messages));
 
   if (!result) return;
 
@@ -265,6 +60,6 @@ const parseMessage = ({ messages }) => {
 
     if (!messages) break;
 
-    result = await postMessage(conversation, parseMessage(messages));
+    result = await postMessage(conversation, getContent(messages));
   }
 })();
