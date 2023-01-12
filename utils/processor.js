@@ -40,8 +40,14 @@ const init = () => {
   };
 };
 
+const boolean = (data) => {
+  return {
+    content: data.args ? 'yes' : 'no',
+  };
+};
+
 const number = (data) => {
-  if (data.operation === 'add') {
+  if (data.operation === 'sum') {
     const sum = data.args.reduce((partialSum, a) => partialSum + Number(a), 0);
 
     return {
@@ -136,4 +142,4 @@ const team = (data) => {
   };
 };
 
-module.exports = { init, number, string, team };
+module.exports = { init, boolean, number, string, team };

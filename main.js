@@ -5,16 +5,18 @@ const {
   getMessage,
   postMessage,
 } = require('./utils/api');
-const { init, number, string, team } = require('./utils/processor');
+const { init, boolean, number, string, team } = require('./utils/processor');
 
-const getContent = ({ messages }) => {
+const getContent = async ({ messages }) => {
   try {
-    const data = parser(messages);
+    const data = await parser(messages);
 
     if (data.type === 'init') {
       return init();
     } else if (data.type === 'number') {
       return number(data);
+    } else if (data.type === 'boolean') {
+      return boolean(data);
     } else if (data.type === 'string') {
       return string(data);
     } else if (data.type === 'team') {
@@ -37,8 +39,8 @@ const getContent = ({ messages }) => {
 
 (async () => {
   const user = await register({
-    name: 'Lancy Goyal',
-    email: 'i.lancygoyal@gmail.com',
+    name: 'Test',
+    email: 'test@gmail.com',
   });
 
   if (!user) return;
@@ -51,15 +53,15 @@ const getContent = ({ messages }) => {
 
   if (!messages) return;
 
-  let result = await postMessage(conversation, getContent(messages));
+  let result = await postMessage(conversation, await getContent(messages));
 
   if (!result) return;
 
-  while (result.correct) {
+  while (result?.correct) {
     messages = await getMessage(conversation);
 
     if (!messages) break;
 
-    result = await postMessage(conversation, getContent(messages));
+    result = await postMessage(conversation, await getContent(messages));
   }
 })();

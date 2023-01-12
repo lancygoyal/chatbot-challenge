@@ -1,0 +1,764 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "forceNER": true,
+    "nlu": {
+      "log": false
+    },
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager",
+      "log": false
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "are,begin,readi,to,you": {
+            "intent": "init",
+            "domain": "default"
+          },
+          "are,continu,question,readi,some,to,word,you": {
+            "intent": "init",
+            "domain": "default"
+          },
+          "are,go,readi,to,you": {
+            "intent": "init",
+            "domain": "default"
+          },
+          "follow,number,of,sum,the": {
+            "intent": "number.sum",
+            "domain": "default"
+          },
+          "follow,largest,number,of,the": {
+            "intent": "number.max",
+            "domain": "default"
+          },
+          "an,even,letter,number,of,onli,repeat,the,with,word": {
+            "intent": "string.even",
+            "domain": "default"
+          },
+          "alphabet,follow,the,word": {
+            "intent": "string.sort_asc",
+            "domain": "default"
+          },
+          "_,a,follow,is,of,team,the,which": {
+            "intent": "team.find",
+            "domain": "default"
+          },
+          "_,an,follow,is,of,team,the,which": {
+            "intent": "team.find",
+            "domain": "default"
+          },
+          "data,establish,in,set,sport,team,the,were": {
+            "intent": "team.find",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "init": "default",
+          "number.sum": "default",
+          "number.max": "default",
+          "string.even": "default",
+          "string.sort_asc": "default",
+          "team.find": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "are you ready to begin",
+            "intent": "init"
+          },
+          {
+            "domain": "default",
+            "utterance": "are you ready to continue to some word questions",
+            "intent": "init"
+          },
+          {
+            "domain": "default",
+            "utterance": "are you ready to go",
+            "intent": "init"
+          },
+          {
+            "domain": "default",
+            "utterance": "sum of the following numbers",
+            "intent": "number.sum"
+          },
+          {
+            "domain": "default",
+            "utterance": "largest of the following numbers",
+            "intent": "number.max"
+          },
+          {
+            "domain": "default",
+            "utterance": "repeat only the words with an even number of letters",
+            "intent": "string.even"
+          },
+          {
+            "domain": "default",
+            "utterance": "alphabetize the following words",
+            "intent": "string.sort_asc"
+          },
+          {
+            "domain": "default",
+            "utterance": "which of the following is a _ team",
+            "intent": "team.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "which of the following is an _ team",
+            "intent": "team.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "sports teams in the data set were established in",
+            "intent": "team.find"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "are": 1,
+              "you": 1,
+              "readi": 1,
+              "to": 1,
+              "begin": 1,
+              "continu": 1,
+              "some": 1,
+              "word": 1,
+              "question": 1,
+              "go": 1,
+              "sum": 1,
+              "of": 1,
+              "the": 1,
+              "follow": 1,
+              "number": 1,
+              "largest": 1,
+              "repeat": 1,
+              "onli": 1,
+              "with": 1,
+              "an": 1,
+              "even": 1,
+              "letter": 1,
+              "alphabet": 1,
+              "which": 1,
+              "is": 1,
+              "a": 1,
+              "_": 1,
+              "team": 1,
+              "sport": 1,
+              "in": 1,
+              "data": 1,
+              "set": 1,
+              "were": 1,
+              "establish": 1
+            },
+            "intents": {
+              "init": 1,
+              "number.sum": 1,
+              "number.max": 1,
+              "string.even": 1,
+              "string.sort_asc": 1,
+              "team.find": 1
+            },
+            "intentFeatures": {
+              "init": {
+                "are": 1,
+                "you": 1,
+                "readi": 1,
+                "to": 1,
+                "begin": 1,
+                "continu": 1,
+                "some": 1,
+                "word": 1,
+                "question": 1,
+                "go": 1
+              },
+              "number.sum": {
+                "sum": 1,
+                "of": 1,
+                "the": 1,
+                "follow": 1,
+                "number": 1
+              },
+              "number.max": {
+                "largest": 1,
+                "of": 1,
+                "the": 1,
+                "follow": 1,
+                "number": 1
+              },
+              "string.even": {
+                "repeat": 1,
+                "onli": 1,
+                "the": 1,
+                "word": 1,
+                "with": 1,
+                "an": 1,
+                "even": 1,
+                "number": 1,
+                "of": 1,
+                "letter": 1
+              },
+              "string.sort_asc": {
+                "alphabet": 1,
+                "the": 1,
+                "follow": 1,
+                "word": 1
+              },
+              "team.find": {
+                "which": 1,
+                "of": 1,
+                "the": 1,
+                "follow": 1,
+                "is": 1,
+                "a": 1,
+                "_": 1,
+                "team": 1,
+                "an": 1,
+                "sport": 1,
+                "in": 1,
+                "data": 1,
+                "set": 1,
+                "were": 1,
+                "establish": 1
+              }
+            },
+            "featuresToIntent": {
+              "are": [
+                "init"
+              ],
+              "you": [
+                "init"
+              ],
+              "readi": [
+                "init"
+              ],
+              "to": [
+                "init"
+              ],
+              "begin": [
+                "init"
+              ],
+              "continu": [
+                "init"
+              ],
+              "some": [
+                "init"
+              ],
+              "word": [
+                "init",
+                "string.even",
+                "string.sort_asc"
+              ],
+              "question": [
+                "init"
+              ],
+              "go": [
+                "init"
+              ],
+              "sum": [
+                "number.sum"
+              ],
+              "of": [
+                "number.sum",
+                "number.max",
+                "string.even",
+                "team.find"
+              ],
+              "the": [
+                "number.sum",
+                "number.max",
+                "string.even",
+                "string.sort_asc",
+                "team.find"
+              ],
+              "follow": [
+                "number.sum",
+                "number.max",
+                "string.sort_asc",
+                "team.find"
+              ],
+              "number": [
+                "number.sum",
+                "number.max",
+                "string.even"
+              ],
+              "largest": [
+                "number.max"
+              ],
+              "repeat": [
+                "string.even"
+              ],
+              "onli": [
+                "string.even"
+              ],
+              "with": [
+                "string.even"
+              ],
+              "an": [
+                "string.even",
+                "team.find"
+              ],
+              "even": [
+                "string.even"
+              ],
+              "letter": [
+                "string.even"
+              ],
+              "alphabet": [
+                "string.sort_asc"
+              ],
+              "which": [
+                "team.find"
+              ],
+              "is": [
+                "team.find"
+              ],
+              "a": [
+                "team.find"
+              ],
+              "_": [
+                "team.find"
+              ],
+              "team": [
+                "team.find"
+              ],
+              "sport": [
+                "team.find"
+              ],
+              "in": [
+                "team.find"
+              ],
+              "data": [
+                "team.find"
+              ],
+              "set": [
+                "team.find"
+              ],
+              "were": [
+                "team.find"
+              ],
+              "establish": [
+                "team.find"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true
+              },
+              "features": [
+                "are",
+                "you",
+                "readi",
+                "to",
+                "begin",
+                "continu",
+                "some",
+                "word",
+                "question",
+                "go",
+                "sum",
+                "of",
+                "the",
+                "follow",
+                "number",
+                "largest",
+                "repeat",
+                "onli",
+                "with",
+                "an",
+                "even",
+                "letter",
+                "alphabet",
+                "which",
+                "is",
+                "a",
+                "_",
+                "team",
+                "sport",
+                "in",
+                "data",
+                "set",
+                "were",
+                "establish"
+              ],
+              "intents": [
+                "init",
+                "number.sum",
+                "number.max",
+                "string.even",
+                "string.sort_asc",
+                "team.find"
+              ],
+              "perceptrons": [
+                [
+                  2.98160719871521,
+                  2.98160719871521,
+                  2.98160719871521,
+                  2.98160719871521,
+                  1.2598426342010498,
+                  0.4444164037704468,
+                  0.4444164037704468,
+                  -0.0650521069765091,
+                  0.4444164037704468,
+                  1.2769306898117065,
+                  -0.07856400310993195,
+                  -0.34747594594955444,
+                  -0.7811905741691589,
+                  -0.48737555742263794,
+                  -0.32523930072784424,
+                  -0.05740407109260559,
+                  -0.122902050614357,
+                  -0.122902050614357,
+                  -0.122902050614357,
+                  -0.122902050614357,
+                  -0.122902050614357,
+                  -0.122902050614357,
+                  -0.27444618940353394,
+                  -0.00906932633370161,
+                  -0.00906932633370161,
+                  -0.00906932633370161,
+                  -0.00906932633370161,
+                  -0.0858067199587822,
+                  -0.06880173832178116,
+                  -0.06880173832178116,
+                  -0.06880173832178116,
+                  -0.06880173832178116,
+                  -0.06880173832178116,
+                  -0.06880173832178116,
+                  1.0897410106758818
+                ],
+                [
+                  -0.06214882805943489,
+                  -0.06214882805943489,
+                  -0.06214882805943489,
+                  -0.06214882805943489,
+                  -0.03229937329888344,
+                  0,
+                  0,
+                  -1.3540542125701904,
+                  0,
+                  -0.02924884483218193,
+                  8.236207962036133,
+                  1.4321438074111938,
+                  0.6219742298126221,
+                  1.2249884605407715,
+                  2.1773879528045654,
+                  -5.494790077209473,
+                  -0.5329152941703796,
+                  -0.5329152941703796,
+                  -0.5329152941703796,
+                  -0.7169712781906128,
+                  -0.5329152941703796,
+                  -0.5329152941703796,
+                  -0.7794473767280579,
+                  -0.7399855256080627,
+                  -0.7399855256080627,
+                  -0.575337290763855,
+                  -0.7399855256080627,
+                  -0.7683932185173035,
+                  -0.02304307371377945,
+                  -0.02304307371377945,
+                  -0.02304307371377945,
+                  -0.02304307371377945,
+                  -0.02304307371377945,
+                  -0.02304307371377945,
+                  0.2788697259301662
+                ],
+                [
+                  -0.07623924314975739,
+                  -0.07623924314975739,
+                  -0.07623924314975739,
+                  -0.07623924314975739,
+                  -0.04100906103849411,
+                  0,
+                  0,
+                  -1.3776081800460815,
+                  0,
+                  -0.030665822327136993,
+                  -5.407863616943359,
+                  1.431122064590454,
+                  0.5807784199714661,
+                  1.2340214252471924,
+                  2.247469425201416,
+                  8.261442184448242,
+                  -0.5431038737297058,
+                  -0.5431038737297058,
+                  -0.5431038737297058,
+                  -0.8132100701332092,
+                  -0.5431038737297058,
+                  -0.5431038737297058,
+                  -0.7826769351959229,
+                  -0.7950357794761658,
+                  -0.7950357794761658,
+                  -0.5355811715126038,
+                  -0.7950357794761658,
+                  -0.859948992729187,
+                  -0.048903029412031174,
+                  -0.048903029412031174,
+                  -0.048903029412031174,
+                  -0.048903029412031174,
+                  -0.048903029412031174,
+                  -0.048903029412031174,
+                  0.25664331019970327
+                ],
+                [
+                  -0.25077664852142334,
+                  -0.25077664852142334,
+                  -0.25077664852142334,
+                  -0.25077664852142334,
+                  -0.013590408489108086,
+                  -0.2251954972743988,
+                  -0.2251954972743988,
+                  1.331649661064148,
+                  -0.2251954972743988,
+                  0,
+                  -0.41690075397491455,
+                  0.5565745830535889,
+                  0.10162287205457687,
+                  -1.7201874256134033,
+                  1.0248854160308838,
+                  -0.3919216990470886,
+                  1.9452060461044312,
+                  1.9452060461044312,
+                  1.9452060461044312,
+                  1.638417363166809,
+                  1.9452060461044312,
+                  1.9452060461044312,
+                  -0.30937761068344116,
+                  -0.4198985695838928,
+                  -0.4198985695838928,
+                  -0.12156632542610168,
+                  -0.4198985695838928,
+                  -0.539973258972168,
+                  -0.07228382676839828,
+                  -0.07228382676839828,
+                  -0.07228382676839828,
+                  -0.07228382676839828,
+                  -0.07228382676839828,
+                  -0.07228382676839828,
+                  -0.09342102072931523
+                ],
+                [
+                  -0.6852184534072876,
+                  -0.6852184534072876,
+                  -0.6852184534072876,
+                  -0.6852184534072876,
+                  -0.030302198603749275,
+                  -0.6363027691841125,
+                  -0.6363027691841125,
+                  3.9699132442474365,
+                  -0.6363027691841125,
+                  -0.003175781574100256,
+                  -0.8694347143173218,
+                  -2.566152572631836,
+                  2.0449862480163574,
+                  2.6696722507476807,
+                  -2.0095105171203613,
+                  -0.8186691999435425,
+                  -0.31416815519332886,
+                  -0.31416815519332886,
+                  -0.31416815519332886,
+                  -0.5563143491744995,
+                  -0.31416815519332886,
+                  -0.31416815519332886,
+                  4.921000957489014,
+                  -0.55442214012146,
+                  -0.55442214012146,
+                  -0.312106192111969,
+                  -0.55442214012146,
+                  -0.8664527535438538,
+                  -0.3098090887069702,
+                  -0.3098090887069702,
+                  -0.3098090887069702,
+                  -0.3098090887069702,
+                  -0.3098090887069702,
+                  -0.3098090887069702,
+                  0.6798842617742381
+                ],
+                [
+                  -0.25058287382125854,
+                  -0.25058287382125854,
+                  -0.25058287382125854,
+                  -0.25058287382125854,
+                  -0.09156820178031921,
+                  -0.037967100739479065,
+                  -0.037967100739479065,
+                  -1.171566367149353,
+                  -0.037967100739479065,
+                  -0.05055711790919304,
+                  -0.7403182983398438,
+                  0.3659002482891083,
+                  1.1533262729644775,
+                  0.14070722460746765,
+                  -1.9934216737747192,
+                  -0.5954239368438721,
+                  -0.29438841342926025,
+                  -0.29438841342926025,
+                  -0.29438841342926025,
+                  0.9899600744247437,
+                  -0.29438841342926025,
+                  -0.29438841342926025,
+                  -0.6442144513130188,
+                  2.433933973312378,
+                  2.433933973312378,
+                  0.9901853799819946,
+                  2.433933973312378,
+                  3.9003453254699707,
+                  1.4664098024368286,
+                  1.4664098024368286,
+                  1.4664098024368286,
+                  1.4664098024368286,
+                  1.4664098024368286,
+                  1.4664098024368286,
+                  0.4335798312979416
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "are you ready to begin"
+      ],
+      [
+        "en",
+        "are you ready to continue to some word questions"
+      ],
+      [
+        "en",
+        "are you ready to go"
+      ],
+      [
+        "en",
+        "sum of the following numbers"
+      ],
+      [
+        "en",
+        "largest of the following numbers"
+      ],
+      [
+        "en",
+        "repeat only the words with an even number of letters"
+      ],
+      [
+        "en",
+        "alphabetize the following words"
+      ],
+      [
+        "en",
+        "which of the following is a _ team"
+      ],
+      [
+        "en",
+        "which of the following is an _ team"
+      ],
+      [
+        "en",
+        "sports teams in the data set were established in"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "init": [
+          {
+            "answer": "yes"
+          }
+        ],
+        "number.sum": [
+          {
+            "answer": "sum"
+          }
+        ],
+        "number.max": [
+          {
+            "answer": "max"
+          }
+        ],
+        "string.even": [
+          {
+            "answer": "even"
+          }
+        ],
+        "string.sort_asc": [
+          {
+            "answer": "sort_asc"
+          }
+        ],
+        "team.find": [
+          {
+            "answer": "find"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

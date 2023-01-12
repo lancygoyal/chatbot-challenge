@@ -1,3 +1,5 @@
+const manager = require('./nlp');
+
 const cleanText = (msg) => {
   msg = msg.replace('.', '').replace('?', '');
 
@@ -12,67 +14,54 @@ const cleanText = (msg) => {
   ];
 };
 
-const parser = (messages) => {
+let nlpTrained = false;
+
+const nlpInit = async () => {
+  await manager.train();
+
+  manager.save();
+
+  nlpTrained = true;
+};
+
+const parser = async (messages) => {
   const text1 = messages[0]?.text;
 
   const text2 = messages[1]?.text;
 
   const text = text2 || text1;
 
+  if (!nlpTrained) {
+    await nlpInit();
+  }
+
   const [ques, args] = cleanText(text);
 
-  if (ques.includes('ready')) {
-    return { type: 'init', operation: 'undefined', args, text };
+  const response = await manager.process('en', text);
+
+  if (response.intent.includes('init')) {
+    return { type: 'boolean', operation: 'undefined', args: true, text };
   }
 
-  if (ques.includes('numbers')) {
-    const rslt = { type: 'number', operation: 'undefined', args, text };
-
-    if (ques.includes('sum')) {
-      return {
-        ...rslt,
-        operation: 'add',
-      };
-    }
-
-    if (ques.includes('largest')) {
-      return {
-        ...rslt,
-        operation: 'max',
-      };
-    }
-
+  if (response.intent.includes('number')) {
     return {
-      ...rslt,
+      type: 'number',
+      operation: response.answer,
+      args: response.sourceEntities.map(({ text }) => text),
+      text,
     };
   }
 
-  if (ques.includes('words')) {
-    const rslt = { type: 'string', operation: 'undefined', args, text };
-
-    if (ques.includes('even')) {
-      return {
-        ...rslt,
-        operation: 'even',
-      };
-    }
-
-    if (ques.includes('alphabetize')) {
-      return {
-        ...rslt,
-        operation: 'sort_asc',
-      };
-    }
-
-    return {
-      ...rslt,
-    };
+  if (response.intent.includes('string')) {
+    return { type: 'string', operation: response.answer, args, text };
   }
 
-  if (ques.includes('team')) {
+  if (response.intent.includes('team')) {
+    console.log(response);
+
     const rslt = {
       type: 'team',
-      operation: 'find',
+      operation: response.answer,
       args: {
         sport: ques
           .replace('which of the following is ', '')
@@ -84,15 +73,11 @@ const parser = (messages) => {
       text,
     };
 
-    if (ques.includes('sports') && ques.includes('established')) {
+    if (response.sourceEntities[1]?.entity === 'daterange') {
       return {
         ...rslt,
-        operation: 'find',
         args: {
-          year: ques.replace(
-            'what sports teams in the data set were established in ',
-            '',
-          ),
+          year: response.sourceEntities[0].text,
         },
       };
     }
